@@ -1,0 +1,93 @@
+{% load static %}
+
+{% extends "base.html" %}
+
+{% block title %}[Nazwa nieruchomości] – Najmator{% endblock %}
+
+{% block additional_head_tags %}<script src="js/enable_lodger_edit.js"></script>{% endblock %}
+
+{% block body_class %}class="estate_page"{% endblock %}
+
+{% block nav %}
+    <div id="estate_data">
+        <a href="javascript:history.go(-1)">Powrót</a>
+        <br />
+        <span class="label">Nazwa:</span> [Nazwa]
+        <br />
+        <span class="label">Adres:</span> [Adres]
+        <br />
+        <span class="label">Wielkość:</span> [Wielkość] m²
+        <br />
+        <span class="label">Rodzaj:</span> [Rodzaj]
+        <br />
+    </div>
+    
+    <div id="actions">
+        <a href="[AKCJA WYLOGOWANIA]">Wyloguj</a>
+        <br />
+        <a href="[AKCJA EDYTUJ NIERUCHOMOŚĆ">Edytuj nieruchomość</a>
+        <br />
+        <a href="[AKCJA USUŃ NIERUCHOMOŚĆ]">Usuń nieruchomość</a>
+    </div>
+{% endblock %}
+    
+{% block page_title %}
+        <h3>Dane lokatora:</h3>
+{% endblock %}
+
+{% block main %}
+    
+<!-- GDY W TRYBIE WYŚWIETLANIA -->
+    <div id="lodger_display" class="estate_page_main_div">
+        <div id="lodger_data">
+            <span class="label">E-mail:</span>
+            [Email]
+            <br />
+            <span class="label">Telefon:</span>
+            [Tel]
+            <br />
+            <span class="label">Imię i nazwisko:</span>
+            [Imię i nazwisko]
+            <br />
+            <span class="label">Cena wynajmu:</span>
+            [Cena]
+            <br />
+            <span class="label">Wynajem od </span>
+            [Data_od] 
+            <span class="label"> do </span>
+            [Data_do]
+            <br />
+        </div>
+        
+        <div id="lodger_data_actions">
+            <a href="[AKCJA USUŃ LOKATORA]">Usuń lokatora</a>
+            <br />
+            <a href="#" onclick="EnableLodgerEdit()">Edytuj dane lokatora</a>  
+        </div>
+    </div>
+<!-- -->
+<!-- GDY W TRYBIE EDYCJI -->
+    <div id="lodger_edit" style="display:none;" class="estate_page_main_div">
+        <form method="post" id="lodger_edit_form" novalidate> 
+        <div id="lodger_form"> 
+              {% csrf_token %}
+              <table border="1"> 
+                {{ form }} 
+              </table> 
+        </div> 
+        <div id="lodger_form_actions"> 
+            <a href="[AKCJA USUŃ LOKATORA]">Usuń lokatora</a> 
+            <br /> 
+            <a href="javascript:{}" onclick="SaveLodgerEdit()">Aktualizuj dane lokatora</a> 
+            <br /> 
+            <a href="#" onclick="CancelLodgerEdit()">Anuluj</a> 
+        </div> 
+        </form>
+    </div>
+<!-- -->
+    
+{% endblock %}
+
+{% block background_copy_right %}
+    Obrazek bananów by <a href="https://en.wikipedia.org/wiki/Banana#/media/File:Banana_and_cross_section.jpg">fir0002</a> (CC BY-NC)
+{% endblock %}

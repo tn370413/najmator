@@ -1,41 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>[Imię i Nazwisko] – Najmator</title>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<link rel="stylesheet" href="style.css">
-	<link rel="icon" type="image/png" href="images/favicon.png" />	
+{% load static %}
+
+{% extends "base.html" %}
+
+{% block title %}[Nazwa nieruchomości] – Edycja – Najmator{% endblock %}
+
+{% block additional_head_tags %}
     <script>
         function SaveEstateEdit() {
             document.getItemById('estate_edit_form').submit();
         }
     </script>
-</head>
+{% endblock %}
 
-<body class="estate_edit_page">
+{% block body_class %}class="estate_edit_page"{% endblock %}
 
-<div id="body_wrapper">
-    <header>
-        <h1>Najmator</h1>
-        <h2>System najmu mieszkań</h2>
-    </header>
+{% block nav %}
+    <div id="estate_data">
+        <a href="javascript:history.go(-1)">Powrót</a>
+    </div>
     
-    <nav>
-        <div id="estate_data">
-            <a href="javascript:history.go(-1)">Powrót</a>
-        </div>
-        
-        <div id="actions">
-            <a href="[AKCJA WYLOGOWANIA]">Wyloguj</a>
-        </div>
-    </nav>
+    <div id="actions">
+        <a href="[AKCJA WYLOGOWANIA]">Wyloguj</a>
+    </div>
+{% endblock %}
     
+{% block page_title %}
     <div id="page_title">
         <h3>Edycja nieruchomości:</h3>
     </div>
+{% endblock %}
 
+{% block main %}
     <form method="post" id="estate_edit_form" novalidate> 
-    <div id="main" class="estate_page_main_div">
+    <div class="estate_page_main_div">
         <div id="lodger_form"> 
               {% csrf_token %}
               <table border="1"> 
@@ -57,15 +54,9 @@
         <!-- -->
         </div> 
     </div>    
-    </form>    
+    </form>
+{% endblock %}
 
-    <footer>
-        <hr />
-        (c) 2018 Uniwersytet Warszawski 
-        <br />
-        Obrazek limonek by <a href="students.mimuw.edu.pl/~tn370413/Najmator/strona_nieruchomosci.html">Evan Amos</a> (CC 0)
-    </footer>
-</div>
-
-</body>
-</html>
+{% block background_copy_right %}
+    Obrazek limonek by <a href="students.mimuw.edu.pl/~tn370413/Najmator/strona_nieruchomosci.html">Evan Amos</a> (CC 0)
+{% endblock %}

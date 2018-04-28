@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}Najmator{% endblock %}</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" href="{% static "style.css" %}">
+	<link rel="icon" type="image/png" href="images/favicon.png" />	
+    {% block additional_head_tags %}{% endblock %}
+</head>
+
+<body {% block body_class %}{% endblock %}>
+
+<div id="body_wrapper">
+    <header>
+        <h1>Najmator</h1>
+        <h2>System najmu mieszkań</h2>
+    </header>
+    
+    <nav>
+        {% block nav %}{% endblock %}
+    </nav>
+    
+    <div id="page_title">
+        {% block page_title %}{% endblock %}
+    </div>
+
+    <div id="main">
+        {% block main %}{% endblock %}
+    </div>
+
+    <footer>
+        <hr />
+        (c) 2018 Uniwersytet Warszawski 
+        <br />
+        {% block background_copy_right %}{% endblock %}
+    </footer>
+</div>
+
+</body>
+</html>
