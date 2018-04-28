@@ -2,6 +2,13 @@
 
 {% block title %}Najmator{% endblock %}
 
+{% block additional_head_tags %}
+    {% if user.is_authenticated and not next %}
+        <meta http-equiv="refresh" content="0; url={% url 'user_page' %}" />
+    {% endif %}
+{% endblock %}
+
+
 {% block body_class %}class="login_page"{% endblock %}
 
     {% block main %}
@@ -9,40 +16,48 @@
 
         {% if next %}
             {% if user.is_authenticated %}
-            <p>Your account doesn't have access to this page. To proceed,
-            please login with an account that has access.</p>
+            <p class="error">Proszę zalogować się na konto posiadające prawa dostępu do tej strony.</p>
             {% else %}
-            <p>Please login to see this page.</p>
+            <p class="error">Proszę zalogować się, by zobaczyć tę stronę.</p>
             {% endif %}
         {% endif %}
-
-        <form method="post" action="{% url 'login' %}" class="login_form form">
-        {% csrf_token %}
-
-        <div class="form_field">
-          {{ form.username.label_tag }} <br />
-          {{ form.username }}
-        </div>
-        <div  class="form_field">
-          {{ form.password.label_tag }} <br />
-          {{ form.password }}
-        </div>
-
-        <div  class="form_submit">
-          <input type="submit" value="Zaloguj" />
-          <input type="hidden" name="next" value="{{ next }}" />
-        </div>
         
-        {% if form.errors %}
-        <p class="error">Nieprawidłowa nazwa użytkownika bądź hasło.</p>
+        {% if user.is_authenticated and not next%}
+            <p class="error">Jesteś już zalogowany.</p> 
+            Jeżeli przeglądarka nie zrobi tego automatycznie,
+            <a href="{% url 'user_page' %}">
+                kliknij tutaj,
+            </a>
+            żeby przejść na swoją stronę użytkownika.
+        {% else %}
+            <form method="post" action="{% url 'login' %}" class="login_form form">
+            {% csrf_token %}
+
+            <div class="form_field">
+              {{ form.username.label_tag }} <br />
+              {{ form.username }}
+            </div>
+            <div  class="form_field">
+              {{ form.password.label_tag }} <br />
+              {{ form.password }}
+            </div>
+
+            <div  class="form_submit">
+              <input type="submit" value="Zaloguj" />
+              <input type="hidden" name="next" value="{{ next }}" />
+            </div>
+            
+            {% if form.errors %}
+            <p class="error">Nieprawidłowa nazwa użytkownika bądź hasło.</p>
+            {% endif %}
+            
+            </form>
+
+            {# Assumes you setup the password_reset view in your URLconf #}
+            <!-- We didn't 
+                <p><a href="{% url 'password_reset' %}">Lost password?</a></p> 
+            -->
         {% endif %}
-        
-        </form>
-
-        {# Assumes you setup the password_reset view in your URLconf #}
-        <!-- We didn't 
-            <p><a href="{% url 'password_reset' %}">Lost password?</a></p> 
-        -->
     </div>
 {% endblock %}
 

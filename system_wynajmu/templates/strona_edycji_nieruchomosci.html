@@ -1,5 +1,3 @@
-{% load static %}
-
 {% extends "base.html" %}
 
 {% block title %}[Nazwa nieruchomości] – Edycja – Najmator{% endblock %}
@@ -20,7 +18,7 @@
     </div>
     
     <div id="actions">
-        <a href="[AKCJA WYLOGOWANIA]">Wyloguj</a>
+        <a href="{% url 'logout' %}">Wyloguj</a>
     </div>
 {% endblock %}
     
@@ -43,14 +41,14 @@
         <!-- [Jeżeli dodawanie] -->
             <a href="javascript:{}" onclick="SaveEstateEdit()">Dodaj nieruchomość</a> 
             <br />
-            <a href="[AKCJA POWROTU DO STRONY UŻYTKOWNIKA]">Anuluj</a>
+            <a href="{% url 'user_page' %}">Anuluj</a>
         <!-- -->
         <!-- [Jeżeli edytowanie] -->
             <a href="[AKCJA USUŃ NIERUCHOMOŚĆ]">Usuń nieruchomość</a> 
             <br /> 
             <a href="javascript:{}" onclick="SaveEstateEdit()">Aktualizuj dane nieruchomości</a> 
             <br />
-            <a href="[AKCJA POWROTU DO STRONY UŻYTKOWNIKA]">Anuluj</a> 
+            <a href="{% url 'user_page' %}">Anuluj</a> 
         <!-- -->
         </div> 
     </div>    
