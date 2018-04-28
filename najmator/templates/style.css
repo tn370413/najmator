@@ -1,0 +1,117 @@
+body {
+    line-height: 1.6;
+    font-size: 18px;
+    font-family: sans-serif;
+    color: #333333;
+    margin: 0 auto;
+}
+
+#body_wrapper {
+    background-color: rgba(255, 255, 255, 0.67);
+    max-width: 80%;
+    padding: 1.5em 1em;
+    height: 100vh;
+    margin: 0 auto;
+}
+
+header {
+    margin-bottom: 1em;
+}
+
+h1, h2, h3 {
+    line-height: 1.2;
+    margin: 0 auto;
+    color: #000066;
+}
+
+a {
+    color: #000066;
+    text-decoration: none;
+}
+
+nav {
+    margin-bottom: 1.5em;
+    background-color: rgba(255, 255, 255, 0.67);
+}
+
+nav, .estate_entry_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+@media all and (max-width: 500px) {
+    nav, .estate_entry_wrapper {
+        flex-direction: column;
+    }
+}
+
+#actions {
+    align-self: flex-start;
+    text-align: right;
+}
+
+#page_title {
+    text-align: center;
+}
+
+#main {
+    margin: auto;
+}
+
+footer {
+/*    position: absolute;
+    bottom: 0;
+*/    width: inherit;
+    font-size: 0.8em;
+}
+
+body.login_page {
+    background-image: url('images/cytryna.png');
+    background-color: #ffff66;
+}
+
+body.user_page {
+    background-image: url('images/brzoskwinia_mala.png');
+    background-color: #ffd2a2;
+}
+
+body.estate_page {
+    background-image: url('images/banan.png');
+    background-color: #ffee88;
+} 
+
+body.estate_edit_page {
+    background-image: url('images/limonka.png');
+    background-color: #c8fb6a;
+}   
+
+.unoccupied_estate {
+    color: #dd2222;
+    font-weight: bold;
+}
+
+#estates_list {
+    list-style-type: none;
+}
+
+#estates_list li {
+    background-color: rgba(255, 255, 255, 0.67);
+}
+
+.estate_rent_dates, .label {
+    font-style: italic;
+    color: #777777;
+}
+
+.estate_page_main_div {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: rgba(255, 255, 255, 0.67);
+}
+
+.estate_page_main_div > * {
+    margin: 0 1em;
+}
