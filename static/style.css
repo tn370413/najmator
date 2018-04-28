@@ -8,10 +8,17 @@ body {
 
 #body_wrapper {
     background-color: rgba(255, 255, 255, 0.67);
-    max-width: 80%;
+    max-width: 70%;
     padding: 1.5em 1em;
-    height: 100vh;
+    height: 100%;
     margin: 0 auto;
+}
+
+@media all and (max-width: 500px) {
+    #body_wrapper {
+        max-width: 100%;
+        width: 100%;
+    }
 }
 
 header {
@@ -58,6 +65,12 @@ nav, .estate_entry_wrapper {
 
 #main {
     margin: auto;
+}
+
+.error {
+    color: #dd2222;
+    font-weight: bold;
+    font-size: 0.9em;
 }
 
 footer {
@@ -114,4 +127,14 @@ body.estate_edit_page {
 
 .estate_page_main_div > * {
     margin: 0 1em;
+}
+
+.login_form_wrapper {
+    margin: 0 auto;
+    width: 50%;
+    min-width: 250px;
+}
+
+.form_field input {
+    width: 80%;
 }

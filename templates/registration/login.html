@@ -4,6 +4,48 @@
 
 {% block body_class %}class="login_page"{% endblock %}
 
+    {% block main %}
+        <div class="login_form_wrapper">
+
+        {% if next %}
+            {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+            {% else %}
+            <p>Please login to see this page.</p>
+            {% endif %}
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}" class="login_form form">
+        {% csrf_token %}
+
+        <div class="form_field">
+          {{ form.username.label_tag }} <br />
+          {{ form.username }}
+        </div>
+        <div  class="form_field">
+          {{ form.password.label_tag }} <br />
+          {{ form.password }}
+        </div>
+
+        <div  class="form_submit">
+          <input type="submit" value="Zaloguj" />
+          <input type="hidden" name="next" value="{{ next }}" />
+        </div>
+        
+        {% if form.errors %}
+        <p class="error">Nieprawidłowa nazwa użytkownika bądź hasło.</p>
+        {% endif %}
+        
+        </form>
+
+        {# Assumes you setup the password_reset view in your URLconf #}
+        <!-- We didn't 
+            <p><a href="{% url 'password_reset' %}">Lost password?</a></p> 
+        -->
+    </div>
+{% endblock %}
+
 {% block background_copy_right %}
     Obrazek cytryn by <a href="https://commons.wikimedia.org/wiki/File:Citrus_limon_extracted_1.png">Andrikkos</a> (CC BY-SA)
 {% endblock %}
