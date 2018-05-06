@@ -13,7 +13,7 @@
     <div id="actions">
         <a href="{% url 'logout' %}">Wyloguj</a>
         <br />
-        <a href="[AKCJA DODAJ NIERUCHOMOŚĆ]">Dodaj nieruchomość</a>
+        <a href="{% url 'system:estate_add' %}">Dodaj nieruchomość</a>
     </div>
 {% endblock %}
     
@@ -25,10 +25,11 @@
 
 {% block main %}
     <ol id="estates_list">
+    {% for estate in estates %}
         <li><div class="estate_entry_wrapper">
             <div class="estate_part estate_info">
-                <h4 class="estate_name">[Nazwa nieruchomości]</h4>
-                [Adres]
+                <h4 class="estate_name">{{ estate.name }}</h4>
+                {{ estate.address }}
             </div>
             <div class="estate_part estate_occupancy">
                 <!-- jeżeli nie wynajęte -->
@@ -49,11 +50,12 @@
                 <!-- koniec jeżeli -->
             </div>
             <div>
-                <a href="[AKCJA EDYCJI]">Edytuj</a>
+                <a href="{% url 'system:estate_edit' %}">Edytuj</a>
                 <br />
                 <a href="[AKCJA USUNIĘCIA NIERUCHOMOŚCI]">Usuń</a>
             </div>
-        </div></li>             
+        </div></li>  
+    {% endfor %}
     </ol>
 {% endblock %}
 

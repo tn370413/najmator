@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}[Nazwa nieruchomości] – Edycja – Najmator{% endblock %}
+{% block title %}{{ estate.name }} – Edycja – Najmator{% endblock %}
 
 {% block additional_head_tags %}
     <script>
         function SaveEstateEdit() {
-            document.getItemById('estate_edit_form').submit();
+            document.getElementById('estate_edit_form').submit();
         }
     </script>
 {% endblock %}
@@ -14,7 +14,7 @@
 
 {% block nav %}
     <div id="estate_data">
-        <a href="javascript:history.go(-1)">Powrót</a>
+        <a href="{% url 'system:user_page' %}">Powrót</a>
     </div>
     
     <div id="actions">
@@ -23,14 +23,20 @@
 {% endblock %}
     
 {% block page_title %}
+{% if edit %}
     <div id="page_title">
         <h3>Edycja nieruchomości:</h3>
     </div>
+{% else %}
+    <div id="page_title">
+        <h3>Dodanie nieruchomości:</h3>
+    </div>
+{% endif %}
 {% endblock %}
 
 {% block main %}
-    <form method="post" id="estate_edit_form" novalidate> 
     <div class="estate_page_main_div">
+    <form method="post" id="estate_edit_form"> 
         <div id="lodger_form"> 
               {% csrf_token %}
               <table border="1"> 
@@ -39,20 +45,24 @@
         </div> 
         <div id="estate_form_actions"> 
         <!-- [Jeżeli dodawanie] -->
+        {% if not edit %}
             <a href="javascript:{}" onclick="SaveEstateEdit()">Dodaj nieruchomość</a> 
             <br />
-            <a href="{% url 'user_page' %}">Anuluj</a>
+            <a href="{% url 'system:user_page' %}">Anuluj</a>
         <!-- -->
         <!-- [Jeżeli edytowanie] -->
-            <a href="[AKCJA USUŃ NIERUCHOMOŚĆ]">Usuń nieruchomość</a> 
+        {% else %}
+            <a href="{% url 'system:delete_estate' %}">Usuń nieruchomość</a> 
             <br /> 
             <a href="javascript:{}" onclick="SaveEstateEdit()">Aktualizuj dane nieruchomości</a> 
             <br />
-            <a href="{% url 'user_page' %}">Anuluj</a> 
+            <a href="{% url 'system:user_page' %}">Anuluj</a> 
+        {% endif %}
         <!-- -->
         </div> 
-    </div>    
     </form>
+    </div>    
+    
 {% endblock %}
 
 {% block background_copy_right %}

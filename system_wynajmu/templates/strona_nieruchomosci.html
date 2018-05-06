@@ -1,88 +1,121 @@
 {% extends "base.html" %}
 
-{% block title %}[Nazwa nieruchomości] – Najmator{% endblock %}
+{% block title %}{{ estate.name }} – Najmator{% endblock %}
 
-{% block additional_head_tags %}<script src="js/enable_lodger_edit.js"></script>{% endblock %}
+{% block additional_head_tags %}<script src="static/js/enable_lodger_edit.js"></script>
+<script>
+function EnableLodgerEdit() {
+    document.getElementById('lodger_edit').style.display = "flex";
+    document.getElementById('lodger_display').style.display = "none";
+}
 
+function SaveLodgerEdit() {
+    document.getElementById('lodger_edit_form').submit();
+}
+
+function CancelLodgerEdit() {
+    document.getElementById('lodger_edit').style.display = "none";
+    document.getElementById('lodger_display').style.display = "flex";
+}
+
+document.getElementById("demo").innerHTML = EnableLodgerEdit(); 
+</script>
+{% endblock %}
 {% block body_class %}class="estate_page"{% endblock %}
 
 {% block nav %}
     <div id="estate_data">
-        <a href="javascript:history.go(-1)">Powrót</a>
+        <a href="{% url 'system:user_page' %}">Powrót</a>
         <br />
-        <span class="label">Nazwa:</span> [Nazwa]
+        <span class="label">Nazwa:</span> {{ estate.name }}
         <br />
-        <span class="label">Adres:</span> [Adres]
+        <span class="label">Adres:</span> {{ estate.address }}
         <br />
-        <span class="label">Wielkość:</span> [Wielkość] m²
+        <span class="label">Wielkość:</span> {{ estate.area }} m²
         <br />
-        <span class="label">Rodzaj:</span> [Rodzaj]
+        <span class="label">Rodzaj:</span> {{ estate.get_type_display }}
         <br />
     </div>
     
     <div id="actions">
         <a href="{% url 'logout' %}">Wyloguj</a>
         <br />
-        <a href="[AKCJA EDYTUJ NIERUCHOMOŚĆ">Edytuj nieruchomość</a>
+        <a href="{% url 'system:estate_edit' %}">Edytuj nieruchomość</a>
         <br />
-        <a href="[AKCJA USUŃ NIERUCHOMOŚĆ]">Usuń nieruchomość</a>
+        <a href="{% url 'system:delete_estate' %}">Usuń nieruchomość</a>
     </div>
 {% endblock %}
-    
+
+
 {% block page_title %}
+{% if found %}
         <h3>Dane lokatora:</h3>
+{% endif %}
 {% endblock %}
+
 
 {% block main %}
     
 <!-- GDY W TRYBIE WYŚWIETLANIA -->
-    <div id="lodger_display" class="estate_page_main_div">
+ <div id="lodger_display" class="estate_page_main_div">
+{% if found %}
         <div id="lodger_data">
             <span class="label">E-mail:</span>
-            [Email]
+            {{ contract.email }}
             <br />
             <span class="label">Telefon:</span>
-            [Tel]
+            {{ contract.phone }}
             <br />
             <span class="label">Imię i nazwisko:</span>
-            [Imię i nazwisko]
+            {{ contract.first_name }} {{ contract.last_name }}
             <br />
             <span class="label">Cena wynajmu:</span>
-            [Cena]
+            {{ contract.price }} zł
             <br />
             <span class="label">Wynajem od </span>
-            [Data_od] 
+            {{ contract.date_start }}
             <span class="label"> do </span>
-            [Data_do]
+            {{ contract.date_end }}
             <br />
         </div>
         
         <div id="lodger_data_actions">
-            <a href="[AKCJA USUŃ LOKATORA]">Usuń lokatora</a>
+            <a href="{% url 'system:delete_contract' %}">Usuń lokatora</a>
             <br />
+            
             <a href="#" onclick="EnableLodgerEdit()">Edytuj dane lokatora</a>  
         </div>
-    </div>
+{% else %}
+    <a href="javascript:{}" onclick="EnableLodgerEdit()">Wprowadź dane lokatora</a>
+{% endif %}
+</div>
+
 <!-- -->
 <!-- GDY W TRYBIE EDYCJI -->
     <div id="lodger_edit" style="display:none;" class="estate_page_main_div">
-        <form method="post" id="lodger_edit_form" novalidate> 
+        <form method="post" id="lodger_edit_form"> 
         <div id="lodger_form"> 
-              {% csrf_token %}
-              <table border="1"> 
-                {{ form }} 
-              </table> 
+            {% csrf_token %}
+            <table border="1"> 
+                {{ form }}
+            </table> 
         </div> 
         <div id="lodger_form_actions"> 
-            <a href="[AKCJA USUŃ LOKATORA]">Usuń lokatora</a> 
+            {% if found %}
+                <a href="{% url 'system:delete_contract' %}">Usuń lokatora</a> 
+                <br />
+            {% endif %}
+            <a href="javascript:{}" onclick="SaveLodgerEdit()">Aktualizuj dane lokatora</a>
             <br /> 
-            <a href="javascript:{}" onclick="SaveLodgerEdit()">Aktualizuj dane lokatora</a> 
-            <br /> 
-            <a href="#" onclick="CancelLodgerEdit()">Anuluj</a> 
+            <a href="">Anuluj</a> 
         </div> 
         </form>
     </div>
 <!-- -->
+    
+{% if invalid %}
+    <script>EnableLodgerEdit();</script>
+{% endif %}
     
 {% endblock %}
 
