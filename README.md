@@ -1,10 +1,6 @@
-# najmator
-System najmu mieszkań
+# n a j m a t o r
+## System najmu mieszkań
 
-Jak postawić u siebie:
+Projekt zrobiony na przedmiot Inżynieria Oprogramowania.
 
-dane do bazy danych jaką trzeba zrobić w postgresie są w najmator/settings.py pod DATABASES;
-a potem tak jak od "Migrate the Database" w tym artykule:
-https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04
-
-Userzy tworzeni w widoku admina pokazanym na końcu artykułu to tacy że można się nimi logować do najmatora :)
+Do włączenia aplikacji potrzebne są [docker](https://docs.docker.com/install/) oraz [docker-compose](https://docs.docker.com/compose/install/). W folderze głównym projektu wywołujemy komendę ```docker-compose up```

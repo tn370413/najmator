@@ -25,8 +25,8 @@ SECRET_KEY = 'hm))ihc@kk1o2axh^!&osd8-*xvv-^+=kl%&q4l*(p59t73hei'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
-
+# ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', '10.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -76,12 +76,12 @@ WSGI_APPLICATION = 'najmator.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'najmator',
         'USER': 'najmatoruser',
         'PASSWORD': 'qwertyuiop',
-        'HOST': 'localhost',
-        'PORT': ''
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
