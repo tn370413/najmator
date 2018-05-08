@@ -1,6 +1,7 @@
 # n a j m a t o r
 ## System najmu mieszkań
 
-Projekt zrobiony na przedmiot Inżynieria Oprogramowania.
+Projekt zrobiony na przedmiot Inżynieria Oprogramowania. Demo aplikacji internetowej do zarządzania najmem mieszkań.
 
-Do włączenia aplikacji potrzebne są [docker](https://docs.docker.com/install/) oraz [docker-compose](https://docs.docker.com/compose/install/). W folderze głównym projektu wywołujemy komendę ```docker-compose up```
+#### Instrukcje budowania dla Ubuntu 16.04
+Do włączenia aplikacji potrzebne są `docker` oraz `docker-compose`. Aby je zainstalować, można użyć skryptu `get-docker.sh`. Aplikację można uruchomić poprzez komendę ```docker-compose up``` w folderze głównym projektu.
