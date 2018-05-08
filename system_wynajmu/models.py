@@ -23,5 +23,3 @@ class Contract(models.Model):
     email = models.CharField(max_length=150, blank=True)
     phone = models.CharField(max_length=15, blank=True)
     estate_id = models.ForeignKey(Estate, on_delete=models.CASCADE)
-
-# Create your models here.

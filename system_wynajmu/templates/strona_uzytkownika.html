@@ -29,36 +29,34 @@
         <li><div class="estate_entry_wrapper">
             <div class="estate_part estate_info">
                 <a href="{% url 'system:estate_page' estate.id %}"><h4 class="estate_name">{{ estate.name }}</h4></a>
-                {{estate.address}}
+                {{ estate.address }}
             </div>
             <div class="estate_part estate_occupancy">
                 {% if contract %}
                     <span class="label estate_property_label">Cena:</span>
                     <span class="estate_price estate_data">
-                        {{contract.price}}
+                        {{ contract.price }}
                     </span>
                     <br />
                     <span class="label estate_lodger_label">Lokator:</span>
                     <span class="estate_lodger_name estate_data">
-                        {{contract.first_name}}
-                        {{contract.last_name}}
+                        {{ contract.first_name }}
+                        {{ contract.last_name }}
                     </span>
                     <br />
-                    <span class="estate_rent_dates">  Od {{contract.date_start}} do  {{contract.date_end}}
-
+                    <span class="estate_rent_dates">  Od {{ contract.date_start }} do  {{ contract.date_end }}
                     </span>
                 {% else %}
                     <span class="unoccupied_estate">NIEWYNAJĘTE</span>
                 {% endif %}
             </div>
             <div>
-                <a href="{% url 'system:estate_edit' estate.id%}">Edytuj</a>
+                <a href="{% url 'system:estate_edit' estate.id %}">Edytuj</a>
                 <br />
                 <a href="{% url 'system:delete_estate' estate.id %}">Usuń</a>
             </div>
         </div></li>
     {% endfor %}
-
     </ol>
 {% endblock %}
 

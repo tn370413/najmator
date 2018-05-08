@@ -10,16 +10,14 @@ import datetime
 @login_required
 def user_page(request):
     estates = Estate.objects.filter(user_id=request.user)
-    con = Contract.objects.all()
-    contracts = []
     cons = {}
     for e in estates:
         c = Contract.objects.filter(estate_id = e)
         try:
             cons[e] = c[0]
-        except Exception:
+        except IndexError:
             cons[e] = None
-    return render(request, 'strona_uzytkownika.html', {'estates': estates, 'user': request.user, 'cons': cons})
+    return render(request, 'strona_uzytkownika.html', {'user': request.user, 'cons': cons})
  
 @login_required 
 def delete_contract(request):
@@ -29,9 +27,6 @@ def delete_contract(request):
         return HttpResponse("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
     contract.delete()
     return HttpResponseRedirect(reverse('system:estate_page', kwargs={'estate_id': estate.id}))
-   
-   
-
     
 @login_required
 def estate_page(request, estate_id): 
