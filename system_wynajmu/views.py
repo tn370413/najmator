@@ -10,7 +10,6 @@ import datetime
 @login_required
 def user_page(request):
     estates = Estate.objects.all().filter(user_id=request.user)
-    
     return render(request, 'strona_uzytkownika.html', {'estates': estates})
  
 @login_required 
@@ -25,8 +24,8 @@ def delete_contract(request):
 
     
 @login_required
-def estate_page(request): 
-    estate = get_object_or_404(Estate, pk=request.session['est'])
+def estate_page(request, estate_id): 
+    estate = get_object_or_404(Estate, pk=estate_id)
     if estate.user_id != request.user:
         return HttpResponse("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
     found_contract = False

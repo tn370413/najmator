@@ -28,7 +28,7 @@
     {% for estate in estates %}
         <li><div class="estate_entry_wrapper">
             <div class="estate_part estate_info">
-                <h4 class="estate_name">{{ estate.name }}</h4>
+                <a href="{% url 'system:estate_page' estate.id %}"><h4 class="estate_name">{{ estate.name }}</h4></a>
                 {{ estate.address }}
             </div>
             <div class="estate_part estate_occupancy">
