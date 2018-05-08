@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
   db:
@@ -10,7 +10,7 @@ services:
       PGDATA: /tmp/pgdata
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: ./wait-for-it.sh db:5432 -- ./docker-entrypoint.sh
     volumes:
       - .:/code
     ports:
