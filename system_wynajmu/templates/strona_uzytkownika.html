@@ -9,14 +9,14 @@
         <span class="user_name">{{ user.first_name }} {{ user.last_name }}</span>
         <br />
         <span class="user_email">{{ user.email }}</span>
-    </div>        
+    </div>
     <div id="actions">
         <a href="{% url 'logout' %}">Wyloguj</a>
         <br />
         <a href="{% url 'system:estate_add' %}">Dodaj nieruchomość</a>
     </div>
 {% endblock %}
-    
+
 {% block page_title %}
     <div id="page_title">
         <h3>Nieruchomości użytkownika:</h3>
@@ -25,37 +25,40 @@
 
 {% block main %}
     <ol id="estates_list">
-    {% for estate in estates %}
+    {% for estate, contract in cons.items %}
         <li><div class="estate_entry_wrapper">
             <div class="estate_part estate_info">
                 <a href="{% url 'system:estate_page' estate.id %}"><h4 class="estate_name">{{ estate.name }}</h4></a>
-                {{ estate.address }}
+                {{estate.address}}
             </div>
             <div class="estate_part estate_occupancy">
-                <!-- jeżeli nie wynajęte -->
-                    <span class="unoccupied_estate">NIEWYNAJĘTE</span>
-                <!-- koniec jeżeli -->
-                <!-- jeżeli wynajęte -->
+                {% if contract %}
                     <span class="label estate_property_label">Cena:</span>
-                    <span class="estate_price estate_data">[Cena]</span>
+                    <span class="estate_price estate_data">
+                        {{contract.price}}
+                    </span>
                     <br />
                     <span class="label estate_lodger_label">Lokator:</span>
                     <span class="estate_lodger_name estate_data">
-                        [Imię i nazwisko lokatora]
+                        {{contract.first_name}}
+                        {{contract.last_name}}
                     </span>
                     <br />
-                    <span class="estate_rent_dates">
-                        Od YYYY-MM-DD do YYYY-MM-DD
+                    <span class="estate_rent_dates">  Od {{contract.date_start}} do  {{contract.date_end}}
+
                     </span>
-                <!-- koniec jeżeli -->
+                {% else %}
+                    <span class="unoccupied_estate">NIEWYNAJĘTE</span>
+                {% endif %}
             </div>
             <div>
                 <a href="{% url 'system:estate_edit' estate.id%}">Edytuj</a>
                 <br />
                 <a href="{% url 'system:delete_estate' estate.id %}">Usuń</a>
             </div>
-        </div></li>  
+        </div></li>
     {% endfor %}
+
     </ol>
 {% endblock %}
 

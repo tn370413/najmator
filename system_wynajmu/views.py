@@ -9,8 +9,17 @@ import datetime
 
 @login_required
 def user_page(request):
-    estates = Estate.objects.all().filter(user_id=request.user)
-    return render(request, 'strona_uzytkownika.html', {'estates': estates, 'user': request.user})
+    estates = Estate.objects.filter(user_id=request.user)
+    con = Contract.objects.all()
+    contracts = []
+    cons = {}
+    for e in estates:
+        c = Contract.objects.filter(estate_id = e)
+        try:
+            cons[e] = c[0]
+        except Exception:
+            cons[e] = None
+    return render(request, 'strona_uzytkownika.html', {'estates': estates, 'user': request.user, 'cons': cons})
  
 @login_required 
 def delete_contract(request):
@@ -42,7 +51,7 @@ def estate_page(request, estate_id):
             found_contract = True
         else:
             return render(request, 'strona_nieruchomosci.html', 
-            {'estate': estate, 'form': form, 'found': found_contract, 'invalid': True})
+            {'estate': estate, 'form': form, 'found': found_contract, 'invalid': True, 'con': con})
     if found_contract:
         request.session['cont'] = con.id
         form = ContractForm(instance=con)
@@ -50,7 +59,7 @@ def estate_page(request, estate_id):
             'form': form, 'found': found_contract, 'contract': con})
     else:
         form = ContractForm(instance=con)
-        return render(request, 'strona_nieruchomosci.html', {'estate': estate, 'form': form, 'found': found_contract})
+        return render(request, 'strona_nieruchomosci.html', {'estate': estate, 'form': form, 'found': found_contract, 'con': con})
 
 @login_required
 def estate_edit_page(request):
