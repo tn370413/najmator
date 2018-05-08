@@ -15,10 +15,11 @@ def user_page(request):
 @login_required 
 def delete_contract(request):
     contract = get_object_or_404(Contract, id=request.session['cont'])
+    estate = contract.estate_id
     if contract.estate_id.user_id != request.user:
         return HttpResponse("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
     contract.delete()
-    return HttpResponseRedirect(reverse('system:estate_page'))
+    return HttpResponseRedirect(reverse('system:estate_page', kwargs={'estate_id': estate.id}))
    
    
 
