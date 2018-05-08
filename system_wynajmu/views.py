@@ -10,7 +10,7 @@ import datetime
 @login_required
 def user_page(request):
     estates = Estate.objects.all().filter(user_id=request.user)
-    return render(request, 'strona_uzytkownika.html', {'estates': estates})
+    return render(request, 'strona_uzytkownika.html', {'estates': estates, 'user': request.user})
  
 @login_required 
 def delete_contract(request):
@@ -73,8 +73,9 @@ def estate_edit_page(request):
 
     
 @login_required 
-def estate_edit(request):
+def estate_edit(request, estate_id):
     request.session['edit'] = True
+    request.session['est'] = estate_id
     return HttpResponseRedirect(reverse('system:estate_edit_page'))
 
 @login_required 
@@ -84,8 +85,8 @@ def estate_add(request):
      
     
 @login_required 
-def delete_estate(request):
-    estate = get_object_or_404(Estate, id=request.session['est'])
+def delete_estate(request, estate_id):
+    estate = get_object_or_404(Estate, id=estate_id)
     if estate.user_id != request.user:
         return HttpResponse("aby usunąć nieruchomość musisz być jej właścicielem")
     estate.delete()

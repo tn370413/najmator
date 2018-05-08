@@ -40,9 +40,9 @@ document.getElementById("demo").innerHTML = EnableLodgerEdit();
     <div id="actions">
         <a href="{% url 'logout' %}">Wyloguj</a>
         <br />
-        <a href="{% url 'system:estate_edit' %}">Edytuj nieruchomość</a>
+        <a href="{% url 'system:estate_edit' estate.id %}">Edytuj nieruchomość</a>
         <br />
-        <a href="{% url 'system:delete_estate' %}">Usuń nieruchomość</a>
+        <a href="{% url 'system:delete_estate' estate.id %}">Usuń nieruchomość</a>
     </div>
 {% endblock %}
 

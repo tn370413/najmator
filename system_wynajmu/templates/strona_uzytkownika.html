@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}[Imię i Nazwisko] – Najmator{% endblock %}
+{% block title %}{{ user.first_name }} {{ user.last_name }} – Najmator{% endblock %}
 
 {% block body_class %}class="user_page"{% endblock %}
 
 {% block nav %}
     <div id="user_data">
-        <span class="user_name">[Imię i Nazwisko]</span>
+        <span class="user_name">{{ user.first_name }} {{ user.last_name }}</span>
         <br />
-        <span class="user_email">[Adres e-mail]</span>
+        <span class="user_email">{{ user.email }}</span>
     </div>        
     <div id="actions">
         <a href="{% url 'logout' %}">Wyloguj</a>
@@ -50,9 +50,9 @@
                 <!-- koniec jeżeli -->
             </div>
             <div>
-                <a href="{% url 'system:estate_edit' %}">Edytuj</a>
+                <a href="{% url 'system:estate_edit' estate.id%}">Edytuj</a>
                 <br />
-                <a href="[AKCJA USUNIĘCIA NIERUCHOMOŚCI]">Usuń</a>
+                <a href="{% url 'system:delete_estate' estate.id %}">Usuń</a>
             </div>
         </div></li>  
     {% endfor %}

@@ -52,7 +52,7 @@
         <!-- -->
         <!-- [Jeżeli edytowanie] -->
         {% else %}
-            <a href="{% url 'system:delete_estate' %}">Usuń nieruchomość</a> 
+            <a href="{% url 'system:delete_estate' estate.id %}">Usuń nieruchomość</a> 
             <br /> 
             <a href="javascript:{}" onclick="SaveEstateEdit()">Aktualizuj dane nieruchomości</a> 
             <br />
