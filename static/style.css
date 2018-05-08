@@ -138,3 +138,10 @@ body.estate_edit_page {
 .form_field input {
     width: 80%;
 }
+
+.errorlist li {
+    list-style-type: none;
+    color: #dd2222;
+    font-weight: bold;
+    font-size: 0.9em;
+}
