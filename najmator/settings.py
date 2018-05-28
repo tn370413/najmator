@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'najmator',
         'USER': 'najmatoruser',
         'PASSWORD': 'qwertyuiop',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }
@@ -131,3 +131,6 @@ STATICFILES_DIRS = [
 LOGIN_REDIRECT_URL = '/system/user_page/'
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

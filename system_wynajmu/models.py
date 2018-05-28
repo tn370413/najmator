@@ -23,3 +23,12 @@ class Contract(models.Model):
     email = models.CharField(max_length=150, blank=True)
     phone = models.CharField(max_length=15, blank=True)
     estate_id = models.ForeignKey(Estate, on_delete=models.CASCADE)
+
+def estate_photo_path(instance, filename):
+    print(instance)
+    return 'estate_photos/{0}/{1}'.format(instance.estate_id, filename)
+
+class Photograph(models.Model):
+    photograph = models.ImageField(upload_to=estate_photo_path)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    estate_id = models.ForeignKey(Estate, on_delete=models.CASCADE)

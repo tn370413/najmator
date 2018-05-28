@@ -100,6 +100,21 @@ body.estate_edit_page {
     background-color: #c8fb6a;
 }   
 
+body.photo_upload_page {
+    background-image: url('images/papeda.png');
+    background-color: #c8fb6a;
+}
+
+body.photo_edit_page {
+    background-image: url('images/pomelo_male.png');
+    background-color: #ffff66;
+}
+
+body.photo_list_page {
+    background-image: url('images/mandarynka_mala.png');
+    background-color: #ffe097;
+}
+
 .unoccupied_estate {
     color: #dd2222;
     font-weight: bold;

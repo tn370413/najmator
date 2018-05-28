@@ -1,5 +1,7 @@
 from django.conf.urls import url
 from django.urls import path
+from django.conf import settings # necessary?
+from django.conf.urls.static import static
 from . import views
 
 app_name = 'system'
@@ -10,5 +12,9 @@ urlpatterns = [
     path('estate_edit/<int:estate_id>/', views.estate_edit, name='estate_edit'),
     url('estate_add/', views.estate_add, name='estate_add'),
     url('delete_contract/', views.delete_contract, name='delete_contract'),
-    path('delete_estate/<int:estate_id>/', views.delete_estate, name='delete_estate')
+    path('delete_estate/<int:estate_id>/', views.delete_estate, name='delete_estate'),
+    path('photo_upload/<int:estate_id>/', views.photo_form_upload, name='photo_upload')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

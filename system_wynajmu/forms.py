@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.core import validators
 import datetime, re
 from django.core.exceptions import ValidationError
-from system_wynajmu.models import Contract, Estate
+from system_wynajmu.models import Contract, Estate, Photograph
 
 class ContractForm(ModelForm):
     class Meta:
@@ -32,3 +32,17 @@ class EstateForm(ModelForm):
     class Meta:
         model = Estate
         fields = ['name', 'address', 'area', 'type']
+        labels = {
+            'name' : 'Nazwa',
+            'address' : 'Adres',
+            'area' : 'Powierzchnia',
+            'type' : 'Rodzaj'
+        }
+
+class PhotoUploadForm(ModelForm):
+    class Meta:
+        model = Photograph
+        fields = ('photograph', )
+        labels = {
+            'photograph' : 'Plik'
+        }

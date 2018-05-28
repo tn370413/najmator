@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{{ estate.name }} – Edycja zdjęcia – Najmator{% endblock %}
+
+{% block additional_head_tags %}
+
+{% endblock %}
+
+{% block body_class %}class="photo_edit_page"{% endblock %}
+
+{% block nav %}
+    <div id="estate_data">
+        <a href="{% url 'system:estate_page' estate.id %}">Powrót</a>
+    </div>
+    
+    <div id="actions">
+        <a href="{% url 'logout' %}">Wyloguj</a>
+    </div>
+{% endblock %}
+    
+{% block page_title %}
+        <h3>Edycja zdjęcia do nieruchomości <br /> {{ estate.name }}</h3>
+    <div id="page_title">
+    </div>
+{% endblock %}
+
+{% block main %}
+    <div class="estate_page_main_div">
+
+    </div>    
+    
+{% endblock %}
+
+{% block background_copy_right %}
+    Mandarynka, pomelo, cytron, papeda. To od nich pochodzi większość gatunków cytrusów uprawianych przemysłowo. Obrazek pomelo: <a href="https://commons.wikimedia.org/wiki/File:Citrus_maxima_piece.jpg">George Shuklin</a> (CC-BY-SA)
+{% endblock %}

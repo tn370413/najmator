@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}{{ estate.name }} – Dodawanie zdjęcia – Najmator{% endblock %}
+
+{% block additional_head_tags %}
+    <script>
+        function SaveEstateEdit() {
+            document.getElementById('photo_upload_form').submit();
+        }
+    </script>
+{% endblock %}
+
+{% block body_class %}class="photo_upload_page"{% endblock %}
+
+{% block nav %}
+    <div id="estate_data">
+        <a href="{% url 'system:estate_page' estate.id %}">Powrót</a>
+    </div>
+    
+    <div id="actions">
+        <a href="{% url 'logout' %}">Wyloguj</a>
+    </div>
+{% endblock %}
+    
+{% block page_title %}
+        <h3>Dodawanie zdjęcia do nieruchomości <br /> {{ estate.name }}</h3>
+    <div id="page_title">
+    </div>
+{% endblock %}
+
+{% block main %}
+    <div class="estate_page_main_div">
+    <form method="post" id="photo_upload_form" enctype="multipart/form-data"> 
+        <div id="lodger_form"> 
+              {% csrf_token %}
+              <table border="1"> 
+                {{ form }} 
+              </table> 
+        </div> 
+        <div id="estate_form_actions"> 
+            <a href="javascript:{}" onclick="SaveEstateEdit()">Dodaj zdjęcie</a> 
+            <br />
+            <a href="{% url 'system:estate_page' estate.id %}">Anuluj</a>
+        </div> 
+    </form>
+    </div>    
+    
+{% endblock %}
+
+{% block background_copy_right %}
+    Mandarynka, pomelo, cytron, papeda. To od nich pochodzi większość gatunków cytrusów uprawianych przemysłowo. Obrazek paped: <a href="https://commons.wikimedia.org/wiki/File:Citrus_hystrix_DC._(AM_AK305877-3).jpg">Ewen Cameron / Auckland Museum</a> (CC-BY)
+{% endblock %}

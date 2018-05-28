@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from django.http import HttpResponseRedirect, HttpResponse
-from system_wynajmu.models import Estate, Contract
-from system_wynajmu.forms import ContractForm, EstateForm
+from system_wynajmu.models import Estate, Contract, Photograph
+from system_wynajmu.forms import ContractForm, EstateForm, PhotoUploadForm
 from django.urls import reverse
 import datetime
 
@@ -96,4 +96,27 @@ def delete_estate(request, estate_id):
         return HttpResponse("aby usunąć nieruchomość musisz być jej właścicielem")
     estate.delete()
     return HttpResponseRedirect(reverse('system:user_page'))
-   
+
+@login_required
+def photo_form_upload(request, estate_id):
+    estate = get_object_or_404(Estate, pk=estate_id)
+    if estate.user_id != request.user:
+        return HttpResponse("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
+
+    if request.method == 'POST':
+        photo = Photograph(estate_id = estate)
+        form = PhotoUploadForm(request.POST, request.FILES, instance=photo)
+        if form.is_valid():
+            photo = form.save()
+            return render(request, 'strona_edycji_zdjecia.html', {'photo': photo})
+    else:
+        form = PhotoUploadForm()
+    return render(request, 'strona_dodawania_zdjecia.html', {
+        'form': form,
+        'estate' : estate
+    })
+    
+# TODO
+@login_required
+def photo_edit_page(request):
+    return HttpResponseRedirect(reverse('system:user_page'))
