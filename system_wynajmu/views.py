@@ -120,3 +120,25 @@ def photo_form_upload(request, estate_id):
 @login_required
 def photo_edit_page(request):
     return HttpResponseRedirect(reverse('system:user_page'))
+
+
+@login_required
+def photo_list(request, estate_id):
+    estate = get_object_or_404(Estate, pk=estate_id)
+    if estate.user_id != request.user:
+        return HttpResponse("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
+    photos = Photograph.objects.all().filter(estate_id = estate)
+    return render(request, "strona_listy_zdjec.html", {'photos': photos, 'estate' : estate})
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

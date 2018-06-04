@@ -26,7 +26,7 @@ class Contract(models.Model):
 
 def estate_photo_path(instance, filename):
     print(instance)
-    return 'estate_photos/{0}/{1}'.format(instance.estate_id, filename)
+    return 'estate_photos/{0}/{1}'.format(instance.estate_id.id, filename)
 
 class Photograph(models.Model):
     photograph = models.ImageField(upload_to=estate_photo_path)

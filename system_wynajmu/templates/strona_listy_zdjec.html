@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+
 {% block title %}{{ estate.name }} – Lista zdjęć – Najmator{% endblock %}
 
 {% block additional_head_tags %}
@@ -26,7 +27,9 @@
 
 {% block main %}
     <div class="estate_page_main_div">
-
+        {% for photo in photos %}
+            <img src="/media/estate_photos/1/index.html" alt="{{photo.photograph.url}}" />
+        {% endfor %}
     </div>    
     
 {% endblock %}
