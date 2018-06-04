@@ -26,11 +26,18 @@
 {% endblock %}
 
 {% block main %}
-    <div class="estate_page_main_div">
+        <div class="photos_super_div2">
         {% for photo in photos %}
-            <img src="{{photo.photograph.url}}" alt="{{photo.photograph.url}}" />
+            <div class="photo">
+                <img src="{{photo.photograph.url}}" alt="{{photo.photograph.filename}}" height="100" />
+            
+                <a href="{% url 'system:photo_edit_page' photo.id%}">Edytuj</a>
+                <a href="{% url 'system:photo_delete' photo.id %}">Usuń</a>
+            </div>
+            
         {% endfor %}
-    </div>    
+        </div>
+      
     
 {% endblock %}
 

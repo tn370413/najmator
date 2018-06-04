@@ -131,7 +131,14 @@ def photo_list(request, estate_id):
     return render(request, "strona_listy_zdjec.html", {'photos': photos, 'estate' : estate})
     
     
-    
+@login_required 
+def photo_delete(request, photo_id):
+    photo = get_object_or_404(Photograph, id=photo_id)
+    estate = photo.estate_id
+    if estate.user_id != request.user:
+        return HttpResponse("aby usunąć zdjęcie nieruchomości musisz być jej właścicielem")
+    photo.delete()
+    return HttpResponseRedirect(reverse('system:photo_list', args=[estate.id]))
     
     
     

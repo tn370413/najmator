@@ -14,7 +14,9 @@ urlpatterns = [
     url('delete_contract/', views.delete_contract, name='delete_contract'),
     path('delete_estate/<int:estate_id>/', views.delete_estate, name='delete_estate'),
     path('photo_upload/<int:estate_id>/', views.photo_form_upload, name='photo_upload'),
-    path('photo_list/<int:estate_id>/', views.photo_list, name='photo_list')
+    path('photo_list/<int:estate_id>/', views.photo_list, name='photo_list'),
+    path('photo_delete/<int:photo_id>/', views.photo_delete, name='photo_delete'),
+    path('photo_edit_page/<int:photo_id>/', views.photo_edit_page, name='photo_edit_page')
 ]
 
 if settings.DEBUG:
