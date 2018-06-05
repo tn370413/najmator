@@ -38,7 +38,9 @@ document.getElementById("demo").innerHTML = EnableLodgerEdit();
     </div>
     
     <div id="actions">
-        <a href="{% url 'logout' %}">Wyloguj</a>
+        <a href="{% url 'system:user_page' %}">Powrót</a>
+        <br />
+        <a href="{% url 'system:photo_list' estate.id %}">Zdjęcia nieruchomości</a>
         <br />
         <a href="{% url 'system:estate_edit' estate.id %}">Edytuj nieruchomość</a>
         <br />

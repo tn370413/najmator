@@ -12,6 +12,8 @@
 {% block nav %}
     <div id="estate_data">
         <a href="{% url 'system:estate_page' estate.id %}">Powrót</a>
+        <br />
+        <a href="{% url 'system:photo_upload' estate.id %}">Dodaj zdjęcie</a>
     </div>
     
     <div id="actions">
