@@ -1,7 +1,12 @@
+from django.core.files.base import ContentFile
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
+import base64
+from django.utils.decorators import method_decorator
+from django.views import generic
+
 from system_wynajmu.models import Estate, Contract, Photograph
 from system_wynajmu.forms import ContractForm, EstateForm, PhotoUploadForm
 from django.urls import reverse
@@ -18,8 +23,8 @@ def user_page(request):
         except IndexError:
             cons[e] = None
     return render(request, 'strona_uzytkownika.html', {'user': request.user, 'cons': cons})
- 
-@login_required 
+
+@login_required
 def delete_contract(request):
     contract = get_object_or_404(Contract, id=request.session['cont'])
     estate = contract.estate_id
@@ -27,9 +32,9 @@ def delete_contract(request):
         return HttpResponse("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
     contract.delete()
     return HttpResponseRedirect(reverse('system:estate_page', kwargs={'estate_id': estate.id}))
-    
+
 @login_required
-def estate_page(request, estate_id): 
+def estate_page(request, estate_id):
     estate = get_object_or_404(Estate, pk=estate_id)
     if estate.user_id != request.user:
         return HttpResponse("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
@@ -45,12 +50,12 @@ def estate_page(request, estate_id):
             con = form.save()
             found_contract = True
         else:
-            return render(request, 'strona_nieruchomosci.html', 
+            return render(request, 'strona_nieruchomosci.html',
             {'estate': estate, 'form': form, 'found': found_contract, 'invalid': True, 'con': con})
     if found_contract:
         request.session['cont'] = con.id
         form = ContractForm(instance=con)
-        return render(request, 'strona_nieruchomosci.html', {'estate': estate, 
+        return render(request, 'strona_nieruchomosci.html', {'estate': estate,
             'form': form, 'found': found_contract, 'contract': con})
     else:
         form = ContractForm(instance=con)
@@ -76,20 +81,20 @@ def estate_edit_page(request):
     form = EstateForm(instance=est)
     return render(request, 'strona_edycji_nieruchomosci.html', {'edit': edit, 'form': form, 'estate': est})
 
-    
-@login_required 
+
+@login_required
 def estate_edit(request, estate_id):
     request.session['edit'] = True
     request.session['est'] = estate_id
     return HttpResponseRedirect(reverse('system:estate_edit_page'))
 
-@login_required 
+@login_required
 def estate_add(request):
     request.session['edit'] = False
     return HttpResponseRedirect(reverse('system:estate_edit_page'))
-     
-    
-@login_required 
+
+
+@login_required
 def delete_estate(request, estate_id):
     estate = get_object_or_404(Estate, id=estate_id)
     if estate.user_id != request.user:
@@ -100,26 +105,29 @@ def delete_estate(request, estate_id):
 @login_required
 def photo_form_upload(request, estate_id):
     estate = get_object_or_404(Estate, pk=estate_id)
+    print(request.FILES)
     if estate.user_id != request.user:
         return HttpResponse("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
 
     if request.method == 'POST':
-        photo = Photograph(estate_id = estate)
+        photo = Photograph(estate_id=estate)
         form = PhotoUploadForm(request.POST, request.FILES, instance=photo)
         if form.is_valid():
             photo = form.save()
-            return render(request, 'strona_edycji_zdjecia.html', {'photo': photo})
+            return render(request, 'strona_edycji_zdjecia.html', {'photograph': photo})
     else:
         form = PhotoUploadForm()
     return render(request, 'strona_dodawania_zdjecia.html', {
         'form': form,
         'estate' : estate
     })
-    
-# TODO
-@login_required
-def photo_edit_page(request):
-    return HttpResponseRedirect(reverse('system:user_page'))
+
+
+@method_decorator(login_required, name='dispatch')
+class PhotoEditView(generic.edit.UpdateView):
+    template_name = 'strona_edycji_zdjecia.html'
+    model = Photograph
+    fields = ['photograph', 'estate_id']
 
 
 @login_required
@@ -129,9 +137,9 @@ def photo_list(request, estate_id):
         return HttpResponse("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
     photos = Photograph.objects.all().filter(estate_id = estate)
     return render(request, "strona_listy_zdjec.html", {'photos': photos, 'estate' : estate})
-    
-    
-@login_required 
+
+
+@login_required
 def photo_delete(request, photo_id):
     photo = get_object_or_404(Photograph, id=photo_id)
     estate = photo.estate_id
@@ -139,13 +147,29 @@ def photo_delete(request, photo_id):
         return HttpResponse("aby usunąć zdjęcie nieruchomości musisz być jej właścicielem")
     photo.delete()
     return HttpResponseRedirect(reverse('system:photo_list', args=[estate.id]))
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+@login_required
+def save_from_edit(request, pk):
+    estate = get_object_or_404(Estate, pk=pk)
+    if estate.user_id != request.user:
+        return HttpResponseForbidden("aby zobaczyć stronę nieruchomości musisz być jej właścicielem")
+
+    if request.method == 'POST':
+        print(request.POST['imgBase64'][0:100])
+        imageEncoded = request.POST['imgBase64'].replace('data:image/png;base64,', '')
+        imageData = base64.b64decode(imageEncoded)
+        imageContentFile = ContentFile(imageData, request.POST['photo_id']+'.jpg')
+        print(imageContentFile)
+        photo = Photograph(estate_id=estate, photograph=imageContentFile)
+        print(photo)
+        photo.save()
+        return HttpResponse('')
+    return HttpResponseNotAllowed(['POST'])
+
+
+
+
+
+
+

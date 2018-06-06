@@ -1,36 +1,203 @@
 {% extends "base.html" %}
 
-{% block title %}{{ estate.name }} – Edycja zdjęcia – Najmator{% endblock %}
+{% block title %}{{ photograph.estate_id.name }} – Edycja zdjęcia – Najmator{% endblock %}
 
 {% block additional_head_tags %}
-
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://uicdn.toast.com/tui.code-snippet/v1.3.0/tui-code-snippet.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.7/fabric.js"></script>
+    {#    <script src="/static/js/fabric.min.js"></script>#}
+    <script src="/static/js/tui-image-editor.js"></script>
+    <script src="/static/js/jscolor.js"></script>
 {% endblock %}
 
 {% block body_class %}class="photo_edit_page"{% endblock %}
 
 {% block nav %}
     <div id="estate_data">
-        <a href="{% url 'system:estate_page' estate.id %}">Powrót</a>
+        <a href="{% url 'system:estate_page' photograph.estate_id.id %}">Powrót</a>
     </div>
-    
+
     <div id="actions">
         <a href="{% url 'logout' %}">Wyloguj</a>
     </div>
 {% endblock %}
-    
+
 {% block page_title %}
-        <h3>Edycja zdjęcia do nieruchomości <br /> {{ estate.name }}</h3>
+    <h3>Edycja zdjęcia do nieruchomości <br/> {{ photograph.estate_id.name }}</h3>
     <div id="page_title">
     </div>
 {% endblock %}
 
 {% block main %}
-    <div class="estate_page_main_div">
 
-    </div>    
-    
+    <div class="estate_page_main_div">
+        <menu>
+            <button onclick="imageEditor.flipX()">Flip X</button>
+            <button onclick="imageEditor.flipY()">Flip Y</button>
+            <button id="btnUndo" onclick="imageEditor.undo()">Undo</button>
+            <button id="btnRedo" onclick="imageEditor.redo()">Redo</button>
+            <button onclick="handleCrop()">Crop</button>
+            <button onclick="imageEditor.rotate(5)">Rotate CW</button>
+            <button onclick="imageEditor.rotate(-5)">Rotate CCW</button>
+            <button onclick="startLine()">Straight line</button>
+            <button onclick="drawShape('circle')">Draw circle</button>
+            <button onclick="drawShape('rect')">Draw rectangle</button>
+            <button onclick="drawShape('triangle')">Draw triangle</button>
+            <button onclick="activateTextMode()">Add text</button>
+            <button id="btnSave" onclick="savePicture()">Save</button>
+            Color: <input id="colorpicker" class="jscolor" value="ab2567" onchange="onColorpickerChange()">
+        </menu>
+    </div>
+
+    <div id="image-editor" style="height: 700px">
+    </div>
+
+    <script>
+        var imageEditor = new tui.ImageEditor('#image-editor', {
+            cssMaxWidth: 700,
+            cssMaxHeight: 700,
+            selectionStyle: {
+                cornerSize: 20,
+                rotatingPointOffset: 70
+            }
+        });
+
+        imageEditor.loadImageFromURL('{{photograph.photograph.url}}', '{% if photograph.photograph.filename %}{{photograph.photograph.filename}}{% else %}placeholder{% endif %}');
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!(/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            }
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function savePicture() {
+            let savebtn = $("#btnSave");
+            savebtn.text("Saving...");
+            $.ajax({
+                    type: "POST",
+                    url: "{% url 'system:photo_upload_from_edit' photograph.estate_id.id %}",
+                    data: {
+                        imgBase64: imageEditor.toDataURL(),
+                        photo_id: {{ photograph.id }}
+                    }
+                }
+            )
+                .done(function () {
+                    savebtn.text("Saved")
+                })
+                .fail(function (xhr) {
+                    console.log(xhr);
+                    savebtn.text("Error");
+                });
+        }
+
+        function onColorpickerChange() {
+            if (imageEditor.getDrawingMode() === 'LINE_DRAWING') {
+                imageEditor.stopDrawingMode();
+                imageEditor.startDrawingMode('LINE_DRAWING', {
+                    width: 10,
+                    color: getColor()
+                })
+            }
+        }
+
+        function startLine() {
+            imageEditor.stopDrawingMode();
+            imageEditor.startDrawingMode('LINE_DRAWING', {
+                width: 10,
+                color: getColor()
+            })
+        }
+
+        function resizeEditor() {
+            var $editor = $('.tui-image-editor');
+            var $container = $('.tui-image-editor-canvas-container');
+            var height = parseFloat($container.css('max-height'));
+
+            $editor.height(height);
+        }
+
+        function handleCrop() {
+            if (imageEditor.getDrawingMode() !== 'CROPPER') {
+                imageEditor.stopDrawingMode();
+                imageEditor.startDrawingMode('CROPPER');
+            } else {
+                imageEditor.crop(imageEditor.getCropzoneRect()).then(() => {
+                    imageEditor.stopDrawingMode();
+                    resizeEditor();
+                });
+            }
+        }
+
+        imageEditor.on({
+                addText: function (pos) {
+                    imageEditor.addText('Double Click', {
+                        position: pos.originPosition,
+                        styles: {
+                            fill: getColor()
+                        }
+                    });
+                }
+            }
+        );
+        function activateShapeMode() {
+            if (imageEditor.getDrawingMode() !== 'SHAPE') {
+                imageEditor.stopDrawingMode();
+                imageEditor.startDrawingMode('SHAPE');
+            }
+        }
+
+        function activateTextMode() {
+            if (imageEditor.getDrawingMode() !== 'TEXT') {
+                imageEditor.stopDrawingMode();
+                imageEditor.startDrawingMode('TEXT');
+            }
+        }
+
+        function drawShape(shape) {
+            var shapeOptions = {};
+            shapeOptions.stroke = '#000000';
+            shapeOptions.fill = '#' + getColor();
+
+            shapeOptions.strokeWidth = 0;
+
+            imageEditor.setDrawingShape(shape, shapeOptions);
+
+            activateShapeMode();
+        }
+
+        function getColor() {
+            return $("#colorpicker").val()
+        }
+
+
+    </script>
+
 {% endblock %}
 
 {% block background_copy_right %}
-    Mandarynka, pomelo, cytron, papeda. To od nich pochodzi większość gatunków cytrusów uprawianych przemysłowo. Obrazek pomelo: <a href="https://commons.wikimedia.org/wiki/File:Citrus_maxima_piece.jpg">George Shuklin</a> (CC-BY-SA)
+    Mandarynka, pomelo, cytron, papeda. To od nich pochodzi większość gatunków cytrusów uprawianych przemysłowo. Obrazek
+    pomelo: <a href="https://commons.wikimedia.org/wiki/File:Citrus_maxima_piece.jpg">George Shuklin</a> (CC-BY-SA)
 {% endblock %}

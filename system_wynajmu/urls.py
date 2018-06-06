@@ -16,7 +16,8 @@ urlpatterns = [
     path('photo_upload/<int:estate_id>/', views.photo_form_upload, name='photo_upload'),
     path('photo_list/<int:estate_id>/', views.photo_list, name='photo_list'),
     path('photo_delete/<int:photo_id>/', views.photo_delete, name='photo_delete'),
-    path('photo_edit_page/<int:photo_id>/', views.photo_edit_page, name='photo_edit_page')
+    path('photo_edit_page/<int:pk>/', views.PhotoEditView.as_view(), name='photo_edit_page'),
+    path('photo_upload_edit/<int:pk>/', views.save_from_edit, name='photo_upload_from_edit')
 ]
 
 if settings.DEBUG:

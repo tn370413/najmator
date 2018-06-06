@@ -160,3 +160,8 @@ body.photo_list_page {
     font-weight: bold;
     font-size: 0.9em;
 }
+
+.tui-image-editor-canvas-container {
+    margin-left: auto;
+    margin-right: auto;
+}
