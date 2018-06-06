@@ -18,7 +18,9 @@
 
 {% block nav %}
     <div id="estate_data">
-        <a href="{% url 'system:estate_page' photograph.estate_id.id %}">Powrót</a>
+        <a href="{% url 'system:photo_list' photograph.estate_id.id %}">Powrót do listy zdjęć</a>
+        <br />
+        <a href="{% url 'system:estate_page' photograph.estate_id.id %}">Powrót na stronę nieruchomości</a>
     </div>
 
     <div id="actions">
